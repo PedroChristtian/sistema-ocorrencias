@@ -36,11 +36,11 @@ def login(request: Request, data: LoginRequest, db: Session = Depends(get_db)):
 
 @router.post("/refresh", response_model=TokenResponse)
 def refresh(data: RefreshRequest, db: Session = Depends(get_db)):
-    payload = decode_token(data.refresh_token)
+    payload = decode_token(data.refresh_token, db)
     if payload is None or payload.get("type") != "refresh":
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Refresh token invalido")
 
-    blacklist_token(data.refresh_token)
+    blacklist_token(data.refresh_token, db)
 
     user_id = payload.get("sub")
     usuario = db.query(Usuario).filter(Usuario.id == int(user_id)).first()
@@ -55,11 +55,11 @@ def refresh(data: RefreshRequest, db: Session = Depends(get_db)):
 
 
 @router.post("/logout")
-def logout(data: LogoutRequest):
+def logout(data: LogoutRequest, db: Session = Depends(get_db)):
     if data.access_token:
-        blacklist_token(data.access_token)
+        blacklist_token(data.access_token, db)
     if data.refresh_token:
-        blacklist_token(data.refresh_token)
+        blacklist_token(data.refresh_token, db)
     return {"detail": "Logout realizado com sucesso"}
 
 

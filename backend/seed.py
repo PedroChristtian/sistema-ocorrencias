@@ -6,6 +6,7 @@ from app.models.categoria import Categoria
 from app.models.historico import Historico
 from app.models.ocorrencia import Ocorrencia
 from app.models.prioridade import Prioridade
+from app.models.token_blacklist import TokenBlacklist
 from app.models.usuario import Usuario
 from app.utils.security import hash_password
 

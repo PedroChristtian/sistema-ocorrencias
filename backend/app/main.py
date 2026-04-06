@@ -8,7 +8,7 @@ from slowapi.util import get_remote_address
 
 from app.config import settings
 from app.database import Base, engine
-from app.models import categoria, historico, ocorrencia, prioridade, usuario  # noqa: F401
+from app.models import categoria, historico, ocorrencia, prioridade, token_blacklist, usuario  # noqa: F401
 from app.routers import auth, categorias, ocorrencias, prioridades
 
 
@@ -29,8 +29,8 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.CORS_ORIGINS,
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allow_headers=["Authorization", "Content-Type"],
 )
 
 app.include_router(auth.router, prefix="/api")
